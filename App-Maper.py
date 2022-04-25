@@ -10,10 +10,10 @@ with cabecalho:
 with corpo:
     arquivos = st.file_uploader('Carregar o Maper em PDF', accept_multiple_files=True)
 
-    with st.expander('PyMuPDF (fitz)'):
-        for arquivo in arquivos:
-            doc = fitz.open(arquivo)
-            st.write(doc[0].get_text())
+    # with st.expander('PyMuPDF (fitz)'):
+    #     for arquivo in arquivos:
+    #         doc = fitz.open(arquivo)
+    #         st.write(doc[0].get_text())
 
     with st.expander('PyPDF2'):
         for arquivo in arquivos:
