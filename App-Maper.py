@@ -36,11 +36,11 @@ with corpo:
             for arquivo in arquivos:
                 df.append(extrair_dados_lideranca(arquivo))
             df = pd.concat(df)
-            st.dataframe(df)
+            st.dataframe(df.set_index(['Nome', 'Cargo'])
 
         st.download_button(
             label = 'Baixar em formato CSV',
-            data = df.to_csv().encode('utf-8'),
+            data = df.to_csv(index=False).encode('utf-8'),
             file_name = 'Maper.csv',
             mime = 'text/csv'
         )
