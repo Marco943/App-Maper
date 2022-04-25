@@ -28,17 +28,19 @@ def extrair_dados_lideranca(relatorio):
 
 with corpo:
     arquivos = st.file_uploader('Carregar o Maper em PDF', accept_multiple_files=True)
+    if len(arquivos) != 0:
+        st.write('Carrege algum relatório de Maper de liderança')
+    else:
+        with st.expander('PyPDF2'):
+            df = []
+            for arquivo in arquivos:
+                df.append(extrair_dados_lideranca(arquivo))
+            df = pd.concat(df)
+            st.dataframe(df)
 
-    with st.expander('PyPDF2'):
-        df = []
-        for arquivo in arquivos:
-            df.append(extrair_dados_lideranca(arquivo))
-        df = pd.concat(df)
-        st.dataframe(df)
-
-    st.download_button(
-        label = 'Baixar em formato CSV',
-        data = df.to_csv().encode('utf-8'),
-        file_name = 'Maper.csv',
-        mime = 'text/csv'
-    )
+        st.download_button(
+            label = 'Baixar em formato CSV',
+            data = df.to_csv().encode('utf-8'),
+            file_name = 'Maper.csv',
+            mime = 'text/csv'
+        )
