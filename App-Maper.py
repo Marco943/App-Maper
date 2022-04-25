@@ -28,7 +28,7 @@ def extrair_dados_lideranca(relatorio):
 
 with corpo:
     arquivos = st.file_uploader('Carregar o Maper em PDF', accept_multiple_files=True)
-    if len(arquivos) != 0:
+    if len(arquivos) == 0:
         st.write('Carrege algum relatório de Maper de liderança')
     else:
         with st.expander('PyPDF2'):
