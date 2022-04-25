@@ -1,4 +1,4 @@
-import streamlit as st, pandas as pd, PyPDF2
+import streamlit as st, pandas as pd, PyPDF2, re
 
 cabecalho = st.container()
 corpo = st.container()
