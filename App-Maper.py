@@ -31,7 +31,7 @@ with corpo:
     if len(arquivos) == 0:
         st.write('Carrege algum relatório de Maper de liderança')
     else:
-        with st.expander('PyPDF2'):
+        with st.expander('Pré-Visualização dos dados', expanded = True):
             df = []
             for arquivo in arquivos:
                 df.append(extrair_dados_lideranca(arquivo))
