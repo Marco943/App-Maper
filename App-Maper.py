@@ -36,7 +36,7 @@ with corpo:
             for arquivo in arquivos:
                 df.append(extrair_dados_lideranca(arquivo))
             df = pd.concat(df)
-            st.dataframe(df.set_index(['Nome', 'Cargo'])
+            st.dataframe(df.set_index(['Nome', 'Cargo']))
 
         st.download_button(
             label = 'Baixar em formato CSV',
