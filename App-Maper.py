@@ -1,4 +1,4 @@
-import streamlit as st, pandas as pd, PyPDF2, re
+import streamlit as st, pandas as pd, PyPDF2, re, io
 
 cabecalho = st.container()
 corpo = st.container()
@@ -9,7 +9,7 @@ with cabecalho:
 @st.experimental_memo
 def extrair_dados_lideranca(relatorio):
     arquivo = PyPDF2.PdfFileReader(relatorio)
-    txt = arquivo.getPage(0).extractText()+ arquivo.getPage(1).extractText()
+    txt = arquivo.getPage(0).extractText() + arquivo.getPage(1).extractText()
     txt = txt.replace('€','').replace(' \n','\n').replace('\n\n','\n')
 
     nome = re.findall(r'NOME:\n(.*)\n', txt)[0]
@@ -26,21 +26,34 @@ def extrair_dados_lideranca(relatorio):
     resposta = pd.DataFrame.from_dict(resposta)
     return resposta
 
+def gerar_excel(df):
+        dados = io.BytesIO()
+        df.reset_index(drop=True).to_excel(dados, encoding = 'utf-8', header = True, index_label = '#')
+        dados.seek(0)
+        return dados
+
 with corpo:
-    arquivos = st.file_uploader('Carregar o Maper em PDF', accept_multiple_files=True)
+    arquivos = st.file_uploader('Relatórios Maper de Liderança', accept_multiple_files=True, help='Carregue aqui relatórios de Maper de Liderança no formato PDF')
     if len(arquivos) == 0:
-        st.write('Carrege algum relatório de Maper de liderança')
+        st.write('Carrege um ou mais relatórios para fazer a extração')
     else:
         with st.expander('Pré-Visualização dos dados', expanded = True):
             df = []
             for arquivo in arquivos:
                 df.append(extrair_dados_lideranca(arquivo))
             df = pd.concat(df)
-            st.dataframe(df.set_index(['Nome', 'Cargo']))
+            st.dataframe(df)
 
         st.download_button(
-            label = 'Baixar em formato CSV',
-            data = df.to_csv(index=False).encode('utf-8'),
+            label = 'Baixar .csv',
+            data = df.reset_index(drop=True).to_csv(index_label = '#').encode('utf-8'),
             file_name = 'Maper.csv',
             mime = 'text/csv'
+        )
+
+        st.download_button(
+            label = 'Baixar .xlsx',
+            data = gerar_excel(df),
+            file_name = 'Maper.xlsx',
+            mime = 'application/vnd.ms-excel'
         )
