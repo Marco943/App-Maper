@@ -1,3 +1,2 @@
-pymupdf
-pdfminer.six
-pypdf2
+pypdf2==1.26.0
+openpyxl==3.0.5
